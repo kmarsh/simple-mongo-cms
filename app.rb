@@ -4,6 +4,12 @@ require 'liquid'
 require 'sinatra'
 require 'mongo'
 
+def benchmark(name = "Untitled", &block)
+  start = Time.now.to_f
+  yield
+  puts "%s: %0.6f" % [name, Time.now.to_f - start]
+end 
+
 class RecordDrop < Liquid::Drop
   def initialize(record)
     @record = record
@@ -90,6 +96,9 @@ get '*' do
   template = $db['pages'].find(:path => route).first
 
   halt 404 if template.nil?
+
+  # return template['body']
+
 
   @template = Liquid::Template.parse(template['body'])
 
