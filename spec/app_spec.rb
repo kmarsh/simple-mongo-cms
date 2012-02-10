@@ -6,7 +6,7 @@ describe 'Main' do
   
   before do
     $mongo = Mongo::Connection.new
-    $db = $mongo['ffx-cms']
+    $db = $mongo['smcms_test']
 
     $db['snippets'].remove
     $db['snippets'].insert('name' => 'header', 'body' => "header")

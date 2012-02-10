@@ -68,8 +68,8 @@ recent_work = <<LIQUID
 {% include 'header' %}
 <h2>Recent Work</h2>
 <ul>
-{% for person in db.team %}
-  <li>{{ person.name }}</li>
+{% for project in db.projects %}
+  <li>{{ project.title }}</li>
 {% endfor %}
 </ul>
 LIQUID
@@ -84,6 +84,11 @@ $db['pages'].remove
 $db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => home)
 $db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => team)
 $db['pages'].insert('path' => '/recent-work', 'title' => 'Recent Work', 'body' => recent_work)
+
+$db['projects'].remove
+%w[CT OC PhotoBoard].each do |project|
+  $db['projects'].insert('title' => project)
+end
 
 $db['team'].remove
 %w[Paul Kevin Scott].each do |person|
