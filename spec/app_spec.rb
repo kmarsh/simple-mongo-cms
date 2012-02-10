@@ -12,17 +12,18 @@ describe 'Main' do
     $db['snippets'].insert('name' => 'header', 'body' => "header")
 
     $db['pages'].remove
-    $db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => "home")
-    $db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => "team")
+    $db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => "Homepage")
+    $db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => "Team")
   end
 
-  it "should GET /" do
+  it "should GET a page at /" do
     get '/'
     last_response.should be_ok
+    last_response.body.should == "Homepage"
   end
 
-  it "should GET" do
-    get '/new'
+  it "should GET a page at a specific path" do
+    get '/team'
     last_response.should be_ok
   end
 
