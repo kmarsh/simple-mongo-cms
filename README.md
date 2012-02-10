@@ -23,3 +23,15 @@ out of a MongoDB database with [Liquid] and [Markdown] templates.
 
 [Liquid]: https://github.com/Shopify/liquid
 [Markdown]: http://daringfireball.net/projects/markdown/
+
+### Contributing
+
+- Fork the project.
+- Make your feature addition or bug fix.
+- Add specs for it. This is important so I don't break it in a future version unintentionally.
+- Commit, do not mess with Rakefile, version, or history. (if you want to have your own version, that is fine but bump version in a commit by itself in another branch so I can ignore when I pull)
+- Send me a pull request. Bonus points for topic branches.
+
+### Copyright
+
+Copyright © 2012 Kevin Marsh. See [MIT-LICENSE](http://github.com/willcodeforfoo/simple-mongo-cms/blob/master/MIT-LICENSE) for details.
