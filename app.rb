@@ -97,9 +97,6 @@ get '*' do
 
   halt 404 if template.nil?
 
-  # return template['body']
-
-
   @template = Liquid::Template.parse(template['body'])
 
   assigns = {
