@@ -1,4 +1,5 @@
-## Simple Mongo CMS
+Simple Mongo CMS [![Build Status](https://secure.travis-ci.org/willcodeforfoo/simple-mongo-cms.png)](http://travis-ci.org/willcodeforfoo/simple-mongo-cms)
+================
 
 SMCMS aims to be a simple, MongoDB driven CMS. Really just enough to pull data
 out of a MongoDB database with [Liquid] and [Markdown] templates.
