@@ -25,10 +25,11 @@ describe 'Main' do
   it "should GET a page at a specific path" do
     get '/team'
     last_response.should be_ok
+    last_response.body.should == "Team"
   end
 
   describe "missing pages" do
-    it "should be 404 for a page that doesn't exist" do
+    it "should return a 404 for a page that doesn't exist" do
       get '/no-page-by-this-name'
       last_response.status.should == 404
     end
