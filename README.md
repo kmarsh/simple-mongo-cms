@@ -1,8 +1,8 @@
 Simple Mongo CMS [![Build Status](https://secure.travis-ci.org/willcodeforfoo/simple-mongo-cms.png)](http://travis-ci.org/willcodeforfoo/simple-mongo-cms)
 ================
 
-SMCMS aims to be a simple, MongoDB driven CMS. Really just enough to pull data
-out of a MongoDB database with [Liquid] and [Markdown] templates.
+SMCMS aims to be a simple, MongoDB driven CMS. Really just enough to pull arbitrary
+data out of a MongoDB database and render with [Liquid] and [Markdown] templates.
 
 ### Example Template
 
@@ -17,9 +17,9 @@ out of a MongoDB database with [Liquid] and [Markdown] templates.
 
 ### TODO
 
-* Get specs running
 * Figure out liquid performance issues
 * Come up with a better name
+* Backend?
 
 [Liquid]: https://github.com/Shopify/liquid
 [Markdown]: http://daringfireball.net/projects/markdown/
