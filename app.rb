@@ -4,6 +4,9 @@ require 'liquid'
 require 'sinatra'
 require 'mongo'
 
+$mongo = Mongo::Connection.new
+$db = $mongo[ENV['MONGO_DB'] || "smcms"]
+
 def benchmark(name = "Untitled", &block)
   start = Time.now.to_f
   yield
@@ -38,62 +41,6 @@ module Liquid
 end
 
 Liquid::Template.file_system = Liquid::MongoFileSystem.new
-
-header = <<LIQUID
-<h1>&lt;form&gt; &amp;&amp; f(x)</h1>
-LIQUID
-
-home = <<LIQUID
-{% include 'header' %}
-<ul>
-  {% for page in db.pages %}
-  <li><a href="{{ page.path }}">{{ page.title }}</a></li>
-  {% endfor %}
-</ul>
-
-<p>Welcome! Blah blah</p>
-LIQUID
-
-team = <<LIQUID
-{% include 'header' %}
-<h2>Team</h2>
-<ul>
-{% for person in db.team %}
-  <li>{{ person.name }}</li>
-{% endfor %}
-</ul>
-LIQUID
-
-recent_work = <<LIQUID
-{% include 'header' %}
-<h2>Recent Work</h2>
-<ul>
-{% for project in db.projects %}
-  <li>{{ project.title }}</li>
-{% endfor %}
-</ul>
-LIQUID
-
-$mongo = Mongo::Connection.new
-$db = $mongo['ffx-cms']
-
-$db['snippets'].remove
-$db['snippets'].insert('name' => 'header', 'body' => header)
-
-$db['pages'].remove
-$db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => home)
-$db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => team)
-$db['pages'].insert('path' => '/recent-work', 'title' => 'Recent Work', 'body' => recent_work)
-
-$db['projects'].remove
-%w[CT OC PhotoBoard].each do |project|
-  $db['projects'].insert('title' => project)
-end
-
-$db['team'].remove
-%w[Paul Kevin Scott].each do |person|
-  $db['team'].insert('name' => person)
-end
 
 get '*' do
   route = params[:splat].join('/')

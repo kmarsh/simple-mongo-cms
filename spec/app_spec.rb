@@ -1,20 +1,8 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe 'Main' do
+describe 'HTTP' do
   
   include Rack::Test::Methods
-  
-  before do
-    $mongo = Mongo::Connection.new
-    $db = $mongo['smcms_test']
-
-    $db['snippets'].remove
-    $db['snippets'].insert('name' => 'header', 'body' => "header")
-
-    $db['pages'].remove
-    $db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => "Homepage")
-    $db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => "Team")
-  end
 
   it "should GET a page at /" do
     get '/'
@@ -34,5 +22,5 @@ describe 'Main' do
       last_response.status.should == 404
     end
   end
-  
+
 end
