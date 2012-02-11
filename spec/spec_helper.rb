@@ -18,9 +18,8 @@ puts "Resetting database..."
 $mongo = Mongo::Connection.new
 $db = $mongo[ENV['MONGO_DB']]
 
-$db['snippets'].remove
-$db['snippets'].insert('name' => 'header', 'body' => "header")
-
-$db['pages'].remove
-$db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => "Homepage")
-$db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => "Team")
+RSpec.configure do |config|
+  config.after(:each) do
+    %w[items snippets pages].each {|collection| $db[collection].remove }
+  end
+end

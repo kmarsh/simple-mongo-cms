@@ -4,6 +4,11 @@ describe 'HTTP' do
   
   include Rack::Test::Methods
 
+  before do
+    $db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => "Homepage")
+    $db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => "Team")
+  end
+
   it "should GET a page at /" do
     get '/'
     last_response.should be_ok
