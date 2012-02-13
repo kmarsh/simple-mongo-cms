@@ -3,7 +3,6 @@ require 'yaml'
 require 'liquid'
 require 'sinatra'
 require 'mongo'
-
 require 'rack/gridfs'
 
 enable :logging
@@ -59,6 +58,18 @@ put '/admin/:collection/:id' do
     "$push" => { "versions" => @page['body'] },
     "$set" =>  { "body" => params[:body] }
   })
+
+  "OK"
+end
+
+# Update the order of a collection
+post '/admin/:collection/order' do
+  # TODO: Optimize this with one query, if possible
+  params[params[:collection]].each_with_index do |record_id, i|
+    $db[params[:collection]].update({"_id" => BSON::ObjectId(record_id)}, {
+      "$set" => { "position" => i * 10 }
+    })
+  end
 
   "OK"
 end

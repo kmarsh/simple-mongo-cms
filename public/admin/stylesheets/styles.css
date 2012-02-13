@@ -9,3 +9,11 @@ h2 span {
   width: 800px;
   border: 1px solid #eee;
 }
+
+ul.sortable li:hover {
+  cursor: move;
+}
+
+.tip {
+  color: #666;
+}

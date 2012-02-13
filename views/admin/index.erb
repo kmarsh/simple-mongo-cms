@@ -1,9 +1,35 @@
 
 <% @content.each do |collection_name, records| %>
   <h2><%= collection_name %></h2>
-  <ul class="<%= collection_name %>-collection">
+  <ul id="<%= collection_name %>" class="sortable">
   <% records.each do |record| %>
-    <li><a href="/admin/<%= collection_name %>/<%= record['_id'] %>/edit"><%= display_for_record(record) %></a></li>
+    <li id="<%= collection_name %>_<%= record['_id'] %>"><a href="/admin/<%= collection_name %>/<%= record['_id'] %>/edit"><%= display_for_record(record) %></a></li>
   <% end %>
   </ul>
 <% end %>
+
+<p class="tip">Tip: Drag an item in a collection to sort.</p>
+
+<script type="text/javascript">
+  $(function(){
+    $("ul.sortable").sortable({
+      axis: 'y',
+      items: 'li',
+      update: function(){
+
+        sortable = $(this)
+
+        $.ajax({
+          url: "/admin/" + sortable.attr('id') + "/order",
+          type: 'post',
+          data: sortable.sortable('serialize'),
+          complete: function(){
+            $(sortable).effect('highlight')
+          }
+        })
+
+
+      }
+    })
+  })
+</script>
