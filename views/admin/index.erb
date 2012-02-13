@@ -1,9 +1,14 @@
 
 <% @content.each do |collection_name, records| %>
   <h2><%= collection_name %> (<a href="/admin/<%= collection_name %>/new">add</a>)</h2>
-  <ul id="<%= collection_name %>" class="sortable">
+  <ul id="<%= collection_name %>" class="deletable sortable">
   <% records.each do |record| %>
-    <li id="<%= collection_name %>_<%= record['_id'] %>"><a href="/admin/<%= collection_name %>/<%= record['_id'] %>/edit"><%= display_for_record(record) %></a></li>
+    <li id="<%= collection_name %>_<%= record['_id'] %>">
+      <a href="/admin/<%= collection_name %>/<%= record['_id'] %>/edit">
+        <%= display_for_record(record) %>
+      </a>
+      <a class="delete" href="/admin/<%= collection_name %>/<%= record['_id'] %>">X</a>
+    </li>
   <% end %>
   </ul>
 <% end %>
@@ -12,6 +17,23 @@
 
 <script type="text/javascript">
   $(function(){
+    $(".delete").click(function(){
+
+      if(confirm("Are you sure?")){
+        parent = $(this).parent()
+        $.ajax({
+          url: $(this).attr('href'),
+          type: 'delete',
+          success: function(){
+            console.log("remove", $(this).parent())
+            parent.remove()
+          }
+        })
+      }
+
+      return false;
+    })
+
     $("ul.sortable").sortable({
       axis: 'y',
       items: 'li',
@@ -27,8 +49,6 @@
             $(sortable).effect('highlight')
           }
         })
-
-
       }
     })
   })

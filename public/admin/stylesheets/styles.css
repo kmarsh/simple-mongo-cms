@@ -1,9 +1,32 @@
+body {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 13px;
+}
 textarea {
   font-family: "Monaco", "Courier New", monospace;
 }
+a {
+  text-decoration: none;
+}
 h2 span {
   color: #999;
-}    
+}
+a.delete {
+  color: #c00;
+  text-decoration: none;
+  margin-left: 5px;
+  font-size: 11px;
+  display: none;
+}
+
+a.delete:hover {
+  font-weight: bold;
+}
+
+.deletable li:hover a.delete {
+  display: inline;
+}
+
 #editor { 
   margin: 0;
   position: absolute;

@@ -9,6 +9,18 @@ describe 'Admin with other collections' do
     @project2 = $db['projects'].insert('title' => 'Little One', 'client' => 'Coke', 'narrative' => "We did something great...", :position => 20)
   end
 
+  describe 'delete' do
+    before do
+      delete "/admin/projects/#{@project1}"
+    end
+
+    it "should delete the project" do
+      last_response.should be_ok
+      $db['projects'].find_one({ :_id => @project1 }).should == nil
+    end
+  end
+
+
   describe 'index' do
     before do
       get '/admin'

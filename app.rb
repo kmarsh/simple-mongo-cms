@@ -32,7 +32,7 @@ end
 
 class CollectionDrop < Liquid::Drop
   def before_method(method)
-    $db[method].find().map {|r| RecordDrop.new(r) }
+    $db[method].find({}, { :sort => ['position', :asc] }).map {|r| RecordDrop.new(r) }
   end
 end
 
@@ -68,6 +68,13 @@ end
 # Display a new form
 get '/admin/:collection/new' do
   erb :'admin/new'
+end
+
+# Delete a page
+delete '/admin/:collection/:id' do
+  $db[params[:collection]].remove({:_id => BSON::ObjectId(params[:id])})
+
+  "OK"
 end
 
 # Update a page
@@ -132,6 +139,9 @@ get '*' do
     'db' => CollectionDrop.new,
     'lorem' => LoremDrop.new
   }
+
+  content_type 'text/css' if template['path'].include?('.css')
+  content_type 'application/js' if template['path'].include?('.js')
 
   @template.render(assigns)
 end
