@@ -3,11 +3,14 @@ textarea {
 }
 h2 span {
   color: #999;
-}
+}    
 #editor { 
-  height: 500px;
-  width: 800px;
-  border: 1px solid #eee;
+  margin: 0;
+  position: absolute;
+  top: 150;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 ul.sortable li:hover {

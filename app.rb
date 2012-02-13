@@ -4,6 +4,7 @@ require 'liquid'
 require 'sinatra'
 require 'mongo'
 require 'rack/gridfs'
+require './drops/lorem_drop.rb'
 
 enable :logging
 
@@ -130,7 +131,8 @@ get '*' do
   @template = Liquid::Template.parse(template['body'])
 
   assigns = {
-    'db' => CollectionDrop.new
+    'db' => CollectionDrop.new,
+    'lorem' => LoremDrop.new
   }
 
   @template.render(assigns)
