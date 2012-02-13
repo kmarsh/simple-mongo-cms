@@ -34,4 +34,12 @@ describe 'Templates' do
     last_response.body.should == "Team"
   end
 
+  it "should render lorem ipsum text" do
+    $db['pages'].insert('path' => '/lorem', 'body' => "{{ lorem }}")
+
+    get '/lorem'
+    last_response.should be_ok
+    last_response.body.split(/\W+/).size.should be >= 20
+  end
+
 end

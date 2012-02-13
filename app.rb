@@ -60,8 +60,6 @@ post '/admin/:collection' do
   new_document.delete("id")
   new_document.delete("splat")
 
-  y new_document
-
   @page = $db[params[:collection]].insert(new_document)
 
   "#{@page}"
