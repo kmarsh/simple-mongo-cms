@@ -20,6 +20,30 @@ describe 'Admin with other collections' do
     end
   end
 
+  describe 'new' do
+    before do
+      get "/admin/pages/new"
+    end
+
+    it "should render a form to add new content" do
+      last_response.should be_ok
+    end    
+  end
+
+  describe 'create' do
+    before do
+      post "/admin/projects", { :body => "Created" }
+    end
+
+    it "should POST a project at /admin/projects" do
+      last_response.should be_ok
+    end
+
+    it "returns the ID with the saved content body" do
+      $db['projects'].find_one({ :_id => BSON::ObjectId(last_response.body.to_s.strip) })['body'].should == "Created"
+    end
+  end
+
   describe 'order' do
     before do
       post "/admin/projects/order", {"projects[]" => [@project2.to_s, @project1.to_s]}
@@ -36,13 +60,23 @@ describe 'Admin with other collections' do
 
   describe 'update' do
     before do
-
       put "/admin/projects/#{@project1}", {:body => "Changed"}
     end
 
     it "should PUT a page at /admin/projects/:id" do
       last_response.should be_ok
       $db['projects'].find_one({ :_id => @project1 })['body'].should == "Changed"
+    end
+  end
+
+  describe 'update with other fields' do
+    before do
+      put "/admin/projects/#{@project1}", {:foobar => "Baz"}
+    end
+
+    it "should PUT a page at /admin/projects/:id" do
+      last_response.should be_ok
+      $db['projects'].find_one({ :_id => @project1 })['foobar'].should == "Baz"
     end
   end
 

@@ -50,13 +50,40 @@ use Rack::GridFS, :database => 'smcms'
 
 Liquid::Template.file_system = Liquid::MongoFileSystem.new
 
+# Create a new page
+post '/admin/:collection' do
+
+  new_document = params.dup
+  new_document.delete("captures")
+  new_document.delete("collection")
+  new_document.delete("id")
+  new_document.delete("splat")
+
+  y new_document
+
+  @page = $db[params[:collection]].insert(new_document)
+
+  "#{@page}"
+end
+
+# Display a new form
+get '/admin/:collection/new' do
+  erb :'admin/new'
+end
+
 # Update a page
 put '/admin/:collection/:id' do
   @page = $db[params[:collection]].find_one({:_id => BSON::ObjectId(params[:id])})
 
+  new_document = params.dup
+  new_document.delete("captures")
+  new_document.delete("collection")
+  new_document.delete("id")
+  new_document.delete("splat")
+
   $db[params[:collection]].update({"_id" => BSON::ObjectId(params[:id])}, {
     "$push" => { "versions" => @page['body'] },
-    "$set" =>  { "body" => params[:body] }
+    "$set" =>  new_document
   })
 
   "OK"

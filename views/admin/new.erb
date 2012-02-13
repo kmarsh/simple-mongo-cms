@@ -1,6 +1,9 @@
-<h2>Editing <%= display_for_record(@page) %> <span></span></h2>
+<h2>Creating new item in <%= params[:collection] %> <span></span></h2>
 
-<pre id="editor"><%= h @page['body'] %></pre>
+<form name="form">
+  <input name="path" size="20" value=""  />
+</form>
+<pre id="editor"></pre>
 
 <script src="/admin/javascripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="/admin/javascripts/ace/theme-clouds.js" type="text/javascript" charset="utf-8"></script>
@@ -12,9 +15,9 @@
     $("h2 span").text("(Saving...)").show()
 
     $.ajax({
-      url: "/admin/<%= params[:collection] %>/<%= @page['_id'] %>",
-      type: "PUT",
-      data: {"body": value },
+      url: "/admin/<%= params[:collection] %>",
+      type: "POST",
+      data: $.extend($("form").serializeObject(), { "data": value }),
       success: function(data) {
         $("h2 span").text("(Saved)").delay(1500).fadeOut(250)
         // TODO: Some kind of indication the page saved.
