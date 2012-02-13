@@ -6,8 +6,8 @@ describe 'Admin with pages' do
 
   describe 'index' do
     before do
-      $db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => "Homepage", 'position' => 50)
-      $db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => "Team", 'position' => 10)
+      $db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => "Homepage")
+      $db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => "Team")
 
       get '/admin'
     end
@@ -20,10 +20,6 @@ describe 'Admin with pages' do
     it "should list pages" do
       last_response.body.should include '/'
       last_response.body.should include '/team'
-    end
-
-    it "should respect the position attribute" do
-      last_response.body.should match /\/.+team/
     end
   end
 

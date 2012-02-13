@@ -14,6 +14,10 @@ $db = $mongo[ENV['MONGO_DB'] || "smcms"]
 helpers do
   include Rack::Utils
   alias_method :h, :escape_html
+
+  def display_for_record(record)
+    record['path'] || record['name'] || record['title'] || record['_id'].to_s
+  end
 end
 
 class RecordDrop < Liquid::Drop
@@ -48,23 +52,30 @@ use Rack::GridFS, :database => 'smcms'
 Liquid::Template.file_system = Liquid::MongoFileSystem.new
 
 # Update a page
-put '/admin/pages/:id' do
-  @page = $db['pages'].find_one({:_id => BSON::ObjectId(params[:id])})
+put '/admin/:collection/:id' do
+  @page = $db[params[:collection]].find_one({:_id => BSON::ObjectId(params[:id])})
 
-
-  $db['pages'].update({ "_id" => BSON::ObjectId(params[:id]) }, {"$push" => {"versions" => @page['body']}, "$set" => {"body" => params[:body]}})
+  $db[params[:collection]].update({"_id" => BSON::ObjectId(params[:id])}, {
+    "$push" => { "versions" => @page['body'] },
+    "$set" =>  { "body" => params[:body] }
+  })
 
   "OK"
 end
 
-get '/admin/pages/:id/edit' do
-  @page = $db['pages'].find_one({:_id => BSON::ObjectId(params[:id])})
+get '/admin/:collection/:id/edit' do
+  @page = $db[params[:collection]].find_one({:_id => BSON::ObjectId(params[:id])})
 
   erb :'admin/edit'
 end
 
 get '/admin' do
-  @pages = $db['pages'].find({})
+  collections = $db.collections.reject {|collection| collection.name.match(/(fs|system)\./) }
+  
+  @content = {}
+  collections.each do |collection|
+    @content[collection.name] = collection.find({}, { :sort => ['position', :asc] })
+  end
 
   erb :'admin/index'
 end

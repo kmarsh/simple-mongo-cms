@@ -1,6 +1,9 @@
-<h2>Pages</h2>
-<ul>
-<% @pages.each do |page| %>
-  <li><a href="/admin/pages/<%= page['_id'] %>/edit"><%= page['path'] %></a></li>
+
+<% @content.each do |collection_name, records| %>
+  <h2><%= collection_name %></h2>
+  <ul class="<%= collection_name %>-collection">
+  <% records.each do |record| %>
+    <li><a href="/admin/<%= collection_name %>/<%= record['_id'] %>/edit"><%= display_for_record(record) %></a></li>
+  <% end %>
+  </ul>
 <% end %>
-</ul>

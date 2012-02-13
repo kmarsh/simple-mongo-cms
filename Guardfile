@@ -5,6 +5,7 @@ notification :off
 
 group :specs do
   guard :rspec, :cli => '--color' do
+    watch(%r{\.rb$}) { "spec" }
     watch(%r{^spec/.+_spec\.rb$})
   end
 end

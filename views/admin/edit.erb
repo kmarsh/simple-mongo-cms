@@ -1,17 +1,4 @@
-<h2>Editing <%= @page['path'] %></h2>
-
-<style type="text/css">
-  #editor { 
-    height: 500px;
-    width: 800px;
-    border: 1px solid #eee;
-  }
-
-  p#save-status {
-    color: #666;
-    font-size: 10px;
-  }
-</style>
+<h2>Editing <%= @page['path'] %> <span></span></h2>
 
 <pre id="editor"><%= h @page['body'] %></pre>
 
@@ -22,11 +9,14 @@
   function savePage(editor){
     value = editor.getSession().getValue()
 
+    $("h2 span").text("(Saving...)").show()
+
     $.ajax({
       url: "/admin/pages/<%= @page['_id'] %>",
       type: "PUT",
       data: {"body": value },
       success: function(data) {
+        $("h2 span").text("(Saved)").delay(1500).fadeOut(250)
         // TODO: Some kind of indication the page saved.
       },
       error: function(jqXHR, textStatus, errorThrown){

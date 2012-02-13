@@ -1,0 +1,11 @@
+textarea {
+  font-family: "Monaco", "Courier New", monospace;
+}
+h2 span {
+  color: #999;
+}
+#editor { 
+  height: 500px;
+  width: 800px;
+  border: 1px solid #eee;
+}
