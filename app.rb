@@ -74,12 +74,14 @@ post '/admin/:collection/order' do
   "OK"
 end
 
+# Display an edit form
 get '/admin/:collection/:id/edit' do
   @page = $db[params[:collection]].find_one({:_id => BSON::ObjectId(params[:id])})
 
   erb :'admin/edit'
 end
 
+# Admin "dashboard", lists all content for editing
 get '/admin' do
   collections = $db.collections.reject {|collection| collection.name.match(/(fs|system)\./) }
   
