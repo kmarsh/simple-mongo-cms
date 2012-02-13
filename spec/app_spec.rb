@@ -26,6 +26,14 @@ describe 'HTTP' do
       get '/no-page-by-this-name'
       last_response.status.should == 404
     end
+
+    it "should return a custom 404 page if one exists" do
+      $db['pages'].insert('path' => '404', 'title' => 'Team', 'body' => "Y U NO EXIST?!")
+
+      get '/no-page-by-this-name'
+      last_response.status.should == 404
+      last_response.body.should == "Y U NO EXIST?!"
+    end
   end
 
 end

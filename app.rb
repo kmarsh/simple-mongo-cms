@@ -126,14 +126,8 @@ get '/admin' do
   erb :'admin/index'
 end
 
-get '*' do
-  route = params[:splat].join('/')
-
-  template = $db['pages'].find(:path => route).first
-
-  halt 404 if template.nil?
-
-  @template = Liquid::Template.parse(template['body'])
+def render_template(template)
+  parsed_template = Liquid::Template.parse(template['body'])
 
   assigns = {
     'db' => CollectionDrop.new,
@@ -143,5 +137,22 @@ get '*' do
   content_type 'text/css' if template['path'].include?('.css')
   content_type 'application/js' if template['path'].include?('.js')
 
-  @template.render(assigns)
+  parsed_template.render(assigns)
+end
+
+get '*' do
+  route = params[:splat].join('/')
+
+  template = $db['pages'].find(:path => route).first
+
+  if template.nil?
+    custom_not_found_template = $db['pages'].find(:path => "404").first
+    if custom_not_found_template
+      halt 404, render_template(custom_not_found_template)
+    else
+      halt 404
+    end
+  end
+
+  render_template(template)
 end
