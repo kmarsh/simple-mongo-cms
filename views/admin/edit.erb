@@ -1,0 +1,61 @@
+<h2>Editing <%= @page['path'] %></h2>
+
+<style type="text/css">
+  #editor { 
+    height: 500px;
+    width: 800px;
+    border: 1px solid #eee;
+  }
+
+  p#save-status {
+    color: #666;
+    font-size: 10px;
+  }
+</style>
+
+<pre id="editor"><%= h @page['body'] %></pre>
+
+<script src="/admin/javascripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/admin/javascripts/ace/theme-clouds.js" type="text/javascript" charset="utf-8"></script>
+<script src="/admin/javascripts/ace/mode-html.js" type="text/javascript" charset="utf-8"></script>
+<script>
+  function savePage(editor){
+    value = editor.getSession().getValue()
+
+    $.ajax({
+      url: "/admin/pages/<%= @page['_id'] %>",
+      type: "PUT",
+      data: {"body": value },
+      success: function(data) {
+        // TODO: Some kind of indication the page saved.
+      },
+      error: function(jqXHR, textStatus, errorThrown){
+        alert('Error saving' + errorThrown)
+      }
+    });
+  }
+
+  window.onload = function(){
+    var editor = ace.edit("editor");
+    editor.getSession().setTabSize(2);
+    editor.getSession().setUseSoftTabs(true);
+
+    editor.setTheme("ace/theme/clouds");
+
+    var HTMLMode = require("ace/mode/html").Mode;
+    editor.getSession().setMode(new HTMLMode());
+
+    var canon = require("pilot/canon");
+    canon.addCommand({
+      name: 'myCommand',
+      bindKey: {
+        win: 'Ctrl-S',
+        mac: 'Command-S',
+        sender: 'editor'
+      },
+      exec: function(env, args, request) {
+        savePage(env.editor)
+      }
+    });
+  };
+</script>

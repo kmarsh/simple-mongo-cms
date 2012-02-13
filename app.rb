@@ -4,8 +4,17 @@ require 'liquid'
 require 'sinatra'
 require 'mongo'
 
+require 'rack/gridfs'
+
+enable :logging
+
 $mongo = Mongo::Connection.new
 $db = $mongo[ENV['MONGO_DB'] || "smcms"]
+
+helpers do
+  include Rack::Utils
+  alias_method :h, :escape_html
+end
 
 class RecordDrop < Liquid::Drop
   def initialize(record)
@@ -34,7 +43,31 @@ module Liquid
   end
 end
 
+use Rack::GridFS, :database => 'smcms'
+
 Liquid::Template.file_system = Liquid::MongoFileSystem.new
+
+# Update a page
+put '/admin/pages/:id' do
+  @page = $db['pages'].find_one({:_id => BSON::ObjectId(params[:id])})
+
+
+  $db['pages'].update({ "_id" => BSON::ObjectId(params[:id]) }, {"$push" => {"versions" => @page['body']}, "$set" => {"body" => params[:body]}})
+
+  "OK"
+end
+
+get '/admin/pages/:id/edit' do
+  @page = $db['pages'].find_one({:_id => BSON::ObjectId(params[:id])})
+
+  erb :'admin/edit'
+end
+
+get '/admin' do
+  @pages = $db['pages'].find({})
+
+  erb :'admin/index'
+end
 
 get '*' do
   route = params[:splat].join('/')
