@@ -4,10 +4,13 @@ describe 'Admin with other collections' do
   
   include Rack::Test::Methods
 
+  before do
+    @project1 = $db['projects'].insert('title' => 'Big One', 'client' => 'Pepsi', 'narrative' => "We did something great...")
+    @project2 = $db['projects'].insert('title' => 'Little One', 'client' => 'Coke', 'narrative' => "We did something great...")
+  end
+
   describe 'index' do
     before do
-      $db['projects'].insert('title' => 'Big One', 'client' => 'Pepsi', 'narrative' => "We did something great...")
-
       get '/admin'
     end
 
@@ -17,40 +20,26 @@ describe 'Admin with other collections' do
     end
   end
 
-  # describe 'update' do
-  #   before do
-  #     @page1 = $db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => "Homepage")
-  #     @page2 = $db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => "Team")
+  describe 'update' do
+    before do
 
-  #     put "/admin/pages/#{@page1.to_s}", {:body => "Changed"}
-  #   end
+      put "/admin/projects/#{@project1}", {:body => "Changed"}
+    end
 
-  #   it "should PUT a page at /admin/pages/:id" do
-  #     last_response.should be_ok
-  #     $db['pages'].find_one({ :path => '/' })['body'].should == "Changed"
-  #   end
+    it "should PUT a page at /admin/projects/:id" do
+      last_response.should be_ok
+      $db['projects'].find_one({ :_id => @project1 })['body'].should == "Changed"
+    end
+  end
 
-  #   it "should keep the previous body in versions" do
-  #     $db['pages'].find_one({ :path => '/' })['versions'].should == ['Homepage']
-  #   end
+  describe 'edit' do
+    before do
+      get "/admin/projects/#{@project1}/edit"
+    end
 
-  #   it "should store more than one previous version" do
-  #     put "/admin/pages/#{@page1.to_s}", { :body => "Changed Again" }
-  #     $db['pages'].find_one({ :path => '/' })['versions'].should == ['Homepage', 'Changed']
-  #   end
-  # end
-
-  # describe 'edit' do
-  #   before do
-  #     page1 = $db['pages'].insert('path' => '/', 'title' => 'Home', 'body' => "Homepage")
-  #     page2 = $db['pages'].insert('path' => '/team', 'title' => 'Team', 'body' => "Team")
-
-  #     get "/admin/pages/#{page1.to_s}/edit"
-  #   end
-
-  #   it "should GET a page at /admin/pages/:id/edit" do
-  #     last_response.should be_ok
-  #     last_response.body.should include "Editing /"
-  #   end    
-  # end
+    it "should GET a page at /admin/projects/:id/edit" do
+      last_response.should be_ok
+      last_response.body.should include "Editing Big One"
+    end    
+  end
 end
