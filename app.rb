@@ -17,7 +17,7 @@ helpers do
 
   def display_for_record(record)
     return record['name'] if record['name'].to_s.strip != ""
-    record['title'] if record['title'].to_s.strip != ""
+    return record['title'] if record['title'].to_s.strip != ""
     record['_id'].to_s 
   end
 end
