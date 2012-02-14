@@ -16,7 +16,9 @@ helpers do
   alias_method :h, :escape_html
 
   def display_for_record(record)
-    record['name'] || record['title'] || record['_id'].to_s
+    return record['name'] if record['name'].to_s.strip != ""
+    record['title'] if record['title'].to_s.strip != ""
+    record['_id'].to_s 
   end
 end
 
