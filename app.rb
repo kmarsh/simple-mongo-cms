@@ -126,13 +126,13 @@ get '/admin' do
   erb :'admin/index'
 end
 
-def render_template(template)
+def render_template(template, extra_assigns = {})
   parsed_template = Liquid::Template.parse(template['body'])
 
   assigns = {
     'db' => CollectionDrop.new,
     'lorem' => LoremDrop.new
-  }
+  }.merge(extra_assigns)
 
   content_type 'text/css' if template['path'].include?('.css')
   content_type 'application/js' if template['path'].include?('.js')
@@ -143,10 +143,29 @@ end
 get '*' do
   route = params[:splat].join('/')
 
-  template = $db['pages'].find(:path => route).first
+  # for routing named variables like /team/:team
+  # TODO Optimize this...
+  path_regexes = $db['pages'].find({}, :fields => "path", :sort => ['position', :asc]).map do |page|
+    [Regexp.new(page['path'].gsub(/(:\w+)/, '([A-z\-]+)') + "$"), page['_id']]
+  end
+
+  template = nil
+  path_regexes.each do |regexp, page_id|
+    if (match = route.match(regexp))
+      template = $db['pages'].find_one('_id' => page_id)
+
+      route_matches = route.match(regexp)
+
+      record = $db['team'].find_one('path' => route_matches[1])
+
+      return render_template(template, {'item' => RecordDrop.new(record)})
+    else
+      template = nil
+    end
+  end
 
   if template.nil?
-    custom_not_found_template = $db['pages'].find(:path => "404").first
+    custom_not_found_template = $db['pages'].find(:path => "/404").first
     if custom_not_found_template
       halt 404, render_template(custom_not_found_template)
     else

@@ -20,6 +20,6 @@ $db = $mongo[ENV['MONGO_DB']]
 
 RSpec.configure do |config|
   config.after(:each) do
-    %w[items snippets pages projects].each {|collection| $db[collection].remove }
+    %w[items snippets pages projects team].each {|collection| $db[collection].remove }
   end
 end

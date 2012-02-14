@@ -17,7 +17,7 @@
     $.ajax({
       url: "/admin/<%= params[:collection] %>",
       type: "POST",
-      data: $.extend($("form").serializeObject(), { "data": value }),
+      data: $.extend($("form").serializeObject(), { "body": value }),
       success: function(data) {
         $("h2 span").text("(Saved)").delay(1500).fadeOut(250)
         // TODO: Some kind of indication the page saved.
