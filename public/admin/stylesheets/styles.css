@@ -5,8 +5,12 @@ body {
 textarea {
   font-family: "Monaco", "Courier New", monospace;
 }
-a {
+a, a:visited {
   text-decoration: none;
+  color: #036;
+}
+a:hover {
+  color: #597a9b;
 }
 h2 span {
   color: #999;
