@@ -1,6 +1,9 @@
 
 <% @content.each do |collection_name, records| %>
-  <h2><%= collection_name %> (<a href="/admin/<%= collection_name %>/new">add</a>)</h2>
+  <h2>
+    <%= collection_name %>
+    <a class="btn btn-small" href="/admin/<%= collection_name %>/new"><i class="icon-plus"></i>add</a>
+  </h3>
   <ul id="<%= collection_name %>" class="deletable sortable">
   <% records.each do |record| %>
     <li class="record" id="<%= collection_name %>_<%= record['_id'] %>">

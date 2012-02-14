@@ -1,8 +1,9 @@
 <h2>Editing <%= display_for_record(@page) %> <span></span></h2>
 
-<form name="form">
+<form name="form" class="well">
 <% [@page.keys, 'title'].flatten.uniq.reject{|k| %w[_id body position versions].include? k }.each do |key| %>
-  <p><label><%= key %></label><br /><input name="<%= key %>" size="40" value="<%= @page[key] %>" /></p>
+  <label><%= key %></label>
+  <input name="<%= key %>" size="40" value="<%= @page[key] %>" />
 <% end %>
 </form>
 
