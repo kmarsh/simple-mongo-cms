@@ -4,6 +4,7 @@
   <ul id="<%= collection_name %>" class="deletable sortable">
   <% records.each do |record| %>
     <li class="record" id="<%= collection_name %>_<%= record['_id'] %>">
+      <span class="handle">==</span>
       <a href="/admin/<%= collection_name %>/<%= record['_id'] %>/edit">
         <span class="display"><%= display_for_record(record) %></span>
       </a>
@@ -38,6 +39,7 @@
     $("ul.sortable").sortable({
       axis: 'y',
       items: 'li',
+      handle: '.handle',
       update: function(){
 
         sortable = $(this)

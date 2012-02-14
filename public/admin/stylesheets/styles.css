@@ -19,7 +19,7 @@ a.delete {
   display: none;
 }
 .record {
-  padding: 3px 0;
+  padding: 1px 0;
 }
 
 .record .display {
@@ -43,8 +43,17 @@ a.delete:hover {
   height: 600px;
 }
 
-ul.sortable li:hover {
+ul.sortable {
+  padding-left: 5px;
+
+  list-style-type: none;
+}
+
+ul.sortable .handle {
+  color: #999;
+  letter-spacing: -2px;
   cursor: move;
+  margin-right: 5px;
 }
 
 .tip {
