@@ -16,7 +16,7 @@ helpers do
   alias_method :h, :escape_html
 
   def display_for_record(record)
-    record['path'] || record['name'] || record['title'] || record['_id'].to_s
+    record['name'] || record['title'] || record['_id'].to_s
   end
 end
 

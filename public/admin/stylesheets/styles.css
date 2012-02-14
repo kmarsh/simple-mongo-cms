@@ -18,7 +18,18 @@ a.delete {
   font-size: 11px;
   display: none;
 }
+.record {
+  padding: 3px 0;
+}
 
+.record .display {
+  width: 300px;
+}
+.record .path {
+  font-family: "Monaco", "Courier New", monospace;
+  color: #888;
+  font-size: 11px;
+}
 a.delete:hover {
   font-weight: bold;
 }
